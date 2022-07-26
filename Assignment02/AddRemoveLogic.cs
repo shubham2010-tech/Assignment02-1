@@ -6,22 +6,28 @@ namespace Assignment02
 {
     internal class AddRemoveLogic
     {
-        public void AddB(CrudOperationOnBook b,int bid,String bname)
+        public void AddNew(object d,int i,string b)
         {
-            
-            b.AddBook(new Book() { BookId = bid, BookName = bname });
-            Console.WriteLine("Book Added Successfully");
+            if(d is CrudOperationOnBook)
+            {
+                CrudOperationOnBook cd= d as CrudOperationOnBook;
+                cd.AddBook(new Book() { BookId = i, BookName = b });
+                Console.WriteLine("Book Added Successfully");
+            }
+            else if(d is CrudOperationOnNewspaper)
+            {
+                CrudOperationOnNewspaper cd = d as CrudOperationOnNewspaper;
+                cd.AddNewspaper(new Newspaper() { NewspaperId = i, NewspaperName = b });
+                Console.WriteLine("Newspaper Added Successfully");
+            }
+            else if(d is Borrower)
+            {
+                Borrower nb = d as Borrower;
+                nb.AddBorrower(new BorrowerList() { BorrowerId = i, BorrowerName = b });
+                Console.WriteLine($"\nHi! {b} Which Book You Will Prefer Today");
+            }
         }
-        public void AddN(CrudOperationOnNewspaper n, int nid, String nname)
-        {
-            n.AddNewspaper(new Newspaper() { NewspaperId = nid, NewspaperName = nname });
-            Console.WriteLine("Newspaper Added Successfully");
-        }
-        public void AddNewBorrower(Borrower b , int boid,string boname)
-        {
-            b.AddBorrower(new BorrowerList() {BorrowerId=boid,BorrowerName=boname });
-            Console.WriteLine($"Hi! {boname} Which Book You Will Prefer Today");
-        }
+       
         
     }
 }

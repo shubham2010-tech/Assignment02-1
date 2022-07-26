@@ -27,9 +27,9 @@ namespace Assignment02
 
 
                 int loginc = Convert.ToInt32(Console.ReadLine());
-                if (loginc == 1)
+                if (loginc == 1) //Librarian
                 {
-                    AddRemoveLogic ad = new AddRemoveLogic();
+                    AddRemoveLogic ad = new AddRemoveLogic(); 
                     
                     while (true)
                     {
@@ -39,7 +39,7 @@ namespace Assignment02
                         "\n3. See All Available Books" +
                         "\n4. Logout");
                         int ch = Convert.ToInt32(Console.ReadLine());
-                        if(ch == 1)//Add 
+                        if(ch == 1)//Add  Operation
                         {
                             while (true)
                             {
@@ -56,7 +56,7 @@ namespace Assignment02
                                         int a = Convert.ToInt32(Console.ReadLine());
                                         Console.Write("Please Enter New Book Name: ");
                                         string b = Console.ReadLine();
-                                        ad.AddB(bl, a, b);
+                                        ad.AddNew(bl, a, b);
                                         //l1.AddBook(new Book() { BookId = a, BookName = b });
                                         //ad.AddB(l1, a, b);
                                         //l1.AddBook(new Book() { BookId = a, BookName = b });
@@ -86,7 +86,7 @@ namespace Assignment02
                                         int a = Convert.ToInt32(Console.ReadLine());
                                         Console.Write("Please Enter New Newspaper Name: ");
                                         string b = Console.ReadLine();
-                                        ad.AddN(nl,a,b);
+                                        ad.AddNew(nl,a,b);
                                         //nl.GetNewspaper(new Newspaper() { NewspaperId = a, NewspaperName = b });
                                         //ad.AddN(, a, b);
                                         Console.WriteLine("\nPress 1 To Add Another Newspaper  \nPress 2 To Exit");
@@ -113,8 +113,8 @@ namespace Assignment02
                                 //break;
                             }
                             
-                        }
-                        else if (ch == 2)//Remove 
+                        }//Add Over
+                        else if (ch == 2)//Remove Operation
                         {
                             while (true)
                             {
@@ -124,7 +124,7 @@ namespace Assignment02
                                     "2: Remove a NewsPaper\n" +
                                     "3: Go Back");
                                 int nb = Convert.ToInt32(Console.ReadLine());
-                                if(nb == 1)
+                                if(nb == 1)//Remove Book
                                 {
                                     Console.Write("\n:::::Remove Book:::::\n ");
                                     while (true)
@@ -155,7 +155,7 @@ namespace Assignment02
 
                                     }
                                 }
-                                else if (nb == 2)
+                                else if (nb == 2)//Remove NewsPaper
                                 {
                                     Console.Write("\n:::::Remove NewsPaper:::::\n ");
                                     while (true)
@@ -191,7 +191,7 @@ namespace Assignment02
                                 }
                             }
                            
-                        }
+                        }//Remove Over
                         else if (ch ==3)//View
                         {
                             while (true)
@@ -218,14 +218,14 @@ namespace Assignment02
                             
                             
                             Console.WriteLine("\nExiting Book Viewing Portal\n");
-                        }
+                        }//ViewOver
                         else
                         {
                             Console.WriteLine("Logging Out\n");
                             Thread.Sleep(3000);
                             Console.WriteLine("Successfully Logged Out");
                             break;
-                        }
+                        }//Logout
                     }
                     //break;
                 }
@@ -239,25 +239,27 @@ namespace Assignment02
                     if (Program.ValidateName(Bname) && Program.ValidateID(id))
                     {
                         int ID = Convert.ToInt32(id);
-                        addbo.AddNewBorrower(newb, ID, Bname);
+                        addbo.AddNew(newb, ID, Bname);
+                        BookBorrowed bb = new BookBorrowed();
+                        BookBorrowerList dum = new BookBorrowerList();
                         while (true)
                         {
                             
                             
                             Console.WriteLine($"\n::::Welcome TO MyLIbrary::::\n::::Login Id {ID}::::\n" +                              
-                                $"\n1: Search For Your Book" +
-                                $"\n2: Search For Your Newspaper" +
+                                $"\n1: Issue Book Or Newspaper" +
+                                $"\n2: Return Book Or Newspaper" +
                                 $"\n3: Check for all Available Books & Newspaper" +
-                                $"\n4: Return Book" +
-                                $"\n5: Exit");
+                                $"\n4: Logout");
                             
                             int nb = Convert.ToInt32(Console.ReadLine());
-                            if (nb == 1)
+                            if (nb == 1)//Issue Book
                             {
                                 Console.WriteLine("\n::::Books in Stock::::");
                                 Program.viewbook(bl);
                                 Console.WriteLine("\n::::NewsPapers in Stock::::");
                                 Program.viewnewspaper(nl);
+                                
                                 while (true) 
                                 {
                                     Console.WriteLine("\n1. To Issue Book\n2. To Issue Newspaper \n3. To Go Back");
@@ -265,17 +267,27 @@ namespace Assignment02
                                     if (a == 1)
                                     {
                                         Console.WriteLine("\nWhich Book You Want Borrow??\nPlease mention It's ID or Name: ");
-                                        string Bookname = Console.ReadLine();
-                                        Book findbook = bl[Bookname, Bookname];
-                                        newb.AddBorrowerBook(findbook, Bname, ID, bl);
-                                        foreach (BookBorrowed b in newb)
+                                        string book = Console.ReadLine();
+                                        Book findbook = bl[book, book];
+                                        newb.AddNewBorrower(findbook, Bname, ID, bl);
+                                        foreach (BookBorrowed b in dum)// Error Here
                                         {
-                                            Console.WriteLine($"\n:::::Book Issued:::::\nBook Name - {b.BookName} Issued To {b.BorrowedName}");
+                                            Console.WriteLine($"\n:::::Book Issued:::::\nBook Name - {b.BookID} Issued To {b.BorrowedName}");
                                         }
+                                        bl.Remove(findbook);
                                     }
                                     else if (a == 2)
                                     {
+                                        Console.WriteLine("\nWhich Newspaper You Want Borrow??\nPlease mention It's ID or Name: ");
+                                        string newspaper = Console.ReadLine();
+                                        Newspaper findnewspaper = nl[newspaper, newspaper];
+                                        newb.AddNewBorrower(findnewspaper, Bname, ID, bl);
 
+                                        foreach (BookBorrowed b in dum)// Error
+                                        {
+                                            Console.WriteLine($"\n:::::Book Issued:::::\nBook Name - {b.BookID} Issued To {b.BorrowedName}");
+                                        }
+                                        nl.Remove(findnewspaper);
                                     }
                                     else
                                     {
@@ -283,12 +295,12 @@ namespace Assignment02
                                     }
                                 }
                                 
-                            }
-                            else if(nb == 2)
+                            }//End Issue Book
+                            else if(nb == 2)//Return Operation
                             {
 
-                            }
-                            else if (nb == 3)
+                            }//End Return Opt
+                            else if (nb == 3)//View Operation
                             {
                                 while (true)
                                 {
@@ -307,11 +319,13 @@ namespace Assignment02
                                     }
                                     else { break; }
                                 }
-                            }
+                            }//End View Opt
                             else
                             {
+                                Thread.Sleep(3000);
+                                Console.WriteLine("Logged Out");
                                 break;
-                            }
+                            }//Logout
                         }
                     }
                     else

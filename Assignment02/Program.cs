@@ -16,12 +16,15 @@ namespace Assignment02
             Librarian l2 = new CrudOperationOnNewspaper();
             CrudOperationOnBook bl = new CrudOperationOnBook();
             CrudOperationOnNewspaper nl = new CrudOperationOnNewspaper();
-            Borrower newb = new Borrower();
+            Borrower newb = new BorrowerList();
+
+            BookBorrowerList bbl = new BookBorrowerList();
+            NewspaperBorrowerList bnl = new NewspaperBorrowerList();
             while (true)
             {
 
                 Console.WriteLine(":::Library Management System:::\n");
-                Console.WriteLine("\n1. Librarian" +
+                Console.WriteLine("1. Librarian" +
                     "\n2. Borrower" +
                     "\n3. Exit");
 
@@ -229,7 +232,7 @@ namespace Assignment02
                     }
                     //break;
                 }
-                else if (loginc == 2)
+                else if (loginc == 2)// Borrower
                 {
                     AddRemoveLogic addbo = new AddRemoveLogic();
                     Console.Write(":::LogIn:::\nEnter Your Name: ");
@@ -240,11 +243,8 @@ namespace Assignment02
                     {
                         int ID = Convert.ToInt32(id);
                         addbo.AddNew(newb, ID, Bname);
-                        BookBorrowed bb = new BookBorrowed();
-                        BookBorrowerList dum = new BookBorrowerList();
                         while (true)
                         {
-                            
                             
                             Console.WriteLine($"\n::::Welcome TO MyLIbrary::::\n::::Login Id {ID}::::\n" +                              
                                 $"\n1: Issue Book Or Newspaper" +
@@ -269,23 +269,33 @@ namespace Assignment02
                                         Console.WriteLine("\nWhich Book You Want Borrow??\nPlease mention It's ID or Name: ");
                                         string book = Console.ReadLine();
                                         Book findbook = bl[book, book];
-                                        newb.AddNewBorrower(findbook, Bname, ID, bl);
-                                        foreach (BookBorrowed b in dum)// Error Here
+                                        bbl.AddNewBorrower(findbook, Bname, ID);
+                                        foreach (BookBorrowed b in bbl)// Error Here
                                         {
-                                            Console.WriteLine($"\n:::::Book Issued:::::\nBook Name - {b.BookID} Issued To {b.BorrowedName}");
+                                            if (b.BorrowedId == ID)
+                                            {
+                                                Console.WriteLine($"\n:::::Book Issued:::::\nBook Name - \"" +
+                                                    $"{b.BookName}\"" +
+                                                    $", Issued To {b.BorrowedName}");
+                                            }
                                         }
                                         bl.Remove(findbook);
                                     }
                                     else if (a == 2)
                                     {
-                                        Console.WriteLine("\nWhich Newspaper You Want Borrow??\nPlease mention It's ID or Name: ");
+                                        Console.WriteLine("\nWhich Newspaper You Want Borrow??\n" +
+                                            "Please mention It's ID or Name: ");
                                         string newspaper = Console.ReadLine();
                                         Newspaper findnewspaper = nl[newspaper, newspaper];
-                                        newb.AddNewBorrower(findnewspaper, Bname, ID, bl);
-
-                                        foreach (BookBorrowed b in dum)// Error
+                                        bnl.AddNewBorrower(findnewspaper, Bname, ID);
+                                        foreach (NewspaperBorrowed b in bnl)// Error
                                         {
-                                            Console.WriteLine($"\n:::::Book Issued:::::\nBook Name - {b.BookID} Issued To {b.BorrowedName}");
+                                            if (b.BorrowedId == ID)
+                                            {
+
+                                                Console.WriteLine($"\n:::::Newspaper Issued:::::" +
+                                                $"\nNewspaper Name - \"{b.NewsPaperName}\", Issued To {b.BorrowedName}");
+                                            }
                                         }
                                         nl.Remove(findnewspaper);
                                     }
@@ -298,7 +308,33 @@ namespace Assignment02
                             }//End Issue Book
                             else if(nb == 2)//Return Operation
                             {
+                                while (true)
+                                {
+                                    Console.WriteLine("\n::::Return Portal::::\n" +
+                                        "\n1. Return Issued Book" +
+                                        "\n2. Return Issued Newspaper" +
+                                        "\n3. To Go Back");
+                                    int nh = Convert.ToInt32(Console.ReadLine());
+                                    if(nh == 1)
+                                    {
+                                        Console.Write("\n::Returning Book::\nEnter Your Book Name: ");
+                                        string bn = Console.ReadLine();
+                                        BookBorrowed cb = bbl[bn];
+                                        bbl.Returning(cb,bl);
+                                    }
+                                    else if (nh == 2)
+                                    {
+                                        Console.Write("\n::Returning Newspaper::\nEnter Your Newspaper Name: ");
+                                        string nn = Console.ReadLine();
+                                        NewspaperBorrowed cn = bnl[nn];
+                                        bnl.Returning(cn, nl);
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
 
+                                }
                             }//End Return Opt
                             else if (nb == 3)//View Operation
                             {
@@ -323,7 +359,7 @@ namespace Assignment02
                             else
                             {
                                 Thread.Sleep(3000);
-                                Console.WriteLine("Logged Out");
+                                Console.WriteLine("Logged Out\n");
                                 break;
                             }//Logout
                         }

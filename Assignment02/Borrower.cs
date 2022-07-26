@@ -5,11 +5,10 @@ using System.Text;
 
 namespace Assignment02
 {
-    internal class Borrower :Library
+    abstract class Borrower :Library
     {
         
         protected List<BorrowerList> _borrowers;
-        protected List<BookBorrowed> _bookBorroweds;
 
 
         public void AddBorrower(BorrowerList newborrower)
@@ -19,8 +18,8 @@ namespace Assignment02
                 _borrowers = new List<BorrowerList>();
             }
             _borrowers.Add(newborrower);
-        }
-        public void AddNewBorrower(object obj, string Name, int BOId, CrudOperationOnBook b)
+        } //Add Borrower
+        public void AddNewBorrower(object obj, string Name, int BOId)
         {
             if (obj is Book)
             {
@@ -58,16 +57,26 @@ namespace Assignment02
                 _NewspaperBorroweds.Add(newn);
             }
 
-        }
+        }//Adding Newspaper and Book Borrower
+
+        abstract public void Returning(object a,object b);
 
     }
     internal class BorrowerList:Borrower
     {
         public int BorrowerId { get; set; }
         public string BorrowerName { get; set; }
+
+        public override void Returning(object a, object b)
+        {
+            throw new NotImplementedException();
+        }
     }
+
+    //Book Borrower List
     class BookBorrowerList:Borrower,IEnumerable
     {
+        
         public IEnumerator GetEnumerator()
         {
             if (_bookBorroweds != null)
@@ -77,12 +86,89 @@ namespace Assignment02
                     yield return AvailablB;
                 }
             }
-
             else
             {
                 yield break;
             }
         }
+
+        public override void Returning(object A,object B) //Returning Book
+        {
+            BookBorrowed b = (BookBorrowed)A;
+            CrudOperationOnBook cb = (CrudOperationOnBook)B;
+            cb.AddBook(new Book() { BookId=b.BookID,BookName=b.BookName });
+            Console.WriteLine($"{b.BookName} is Returned Successfully\n:::Have A Nice Day:::\n");
+            _bookBorroweds.Remove(b);
+        }
+        public BookBorrowed this[string BookName] //Check if Book is Issued
+        {
+
+            get
+            {
+                BookBorrowed fb = null;
+                
+
+                foreach (BookBorrowed bb in _bookBorroweds)
+                {
+                    if (bb.BookName == BookName)
+                    {
+
+                        fb = bb;
+                        break;
+                    }
+                }
+                return fb;
+            }
+
+        }
     }
-    
+
+
+    //Newspaper Borrower List
+    class NewspaperBorrowerList : Borrower, IEnumerable
+    {
+
+        public IEnumerator GetEnumerator()
+        {
+            if (_NewspaperBorroweds != null)
+            {
+                foreach (NewspaperBorrowed AvailablN in _NewspaperBorroweds)
+                {
+                    yield return AvailablN;
+                }
+            }
+            else
+            {
+                yield break;
+            }
+        }
+
+        public override void Returning(object A,object B) //Returning Newspaper
+        {
+            NewspaperBorrowed n = (NewspaperBorrowed)A;
+            CrudOperationOnNewspaper cn = (CrudOperationOnNewspaper)B;
+            cn.AddNewspaper(new Newspaper() { NewspaperId = n.NewsPaperID, NewspaperName = n.NewsPaperName });
+            Console.WriteLine($"{n.NewsPaperName} is Returned Successfully\n:::Have A Nice Day:::\n");
+            _NewspaperBorroweds.Remove(n);
+        }
+        public NewspaperBorrowed this[string NewspaperName] //Check if Newspaper is Issued
+        {
+            get
+            {
+                NewspaperBorrowed fn = null;
+
+                foreach (NewspaperBorrowed bn in _NewspaperBorroweds)
+                {
+                    if (bn.NewsPaperName == NewspaperName)
+                    {
+                        fn = bn;
+                        break;
+                    }
+                }
+                return fn;
+            }
+
+        }
+    }
+
 }

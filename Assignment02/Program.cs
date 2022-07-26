@@ -16,6 +16,7 @@ namespace Assignment02
             Librarian l2 = new CrudOperationOnNewspaper();
             CrudOperationOnBook bl = new CrudOperationOnBook();
             CrudOperationOnNewspaper nl = new CrudOperationOnNewspaper();
+            Borrower newb = new Borrower();
             while (true)
             {
 
@@ -230,17 +231,87 @@ namespace Assignment02
                 }
                 else if (loginc == 2)
                 {
-                    Console.Write("Enter Your Name: ");
+                    AddRemoveLogic addbo = new AddRemoveLogic();
+                    Console.Write(":::LogIn:::\nEnter Your Name: ");
                     string Bname = Console.ReadLine();
-                    Console.WriteLine("Enter Your Id");
+                    Console.Write("Enter Your Id: ");
                     string id = Console.ReadLine();
                     if (Program.ValidateName(Bname) && Program.ValidateID(id))
                     {
+                        int ID = Convert.ToInt32(id);
+                        addbo.AddNewBorrower(newb, ID, Bname);
                         while (true)
                         {
-                            Console.WriteLine($"::::Welcome TO MyLIbrary::::\n" +
-                                $"Hi! {Bname} Which Book You Will Prefer Today");
-                            Console.ReadLine();
+                            
+                            
+                            Console.WriteLine($"\n::::Welcome TO MyLIbrary::::\n::::Login Id {ID}::::\n" +                              
+                                $"\n1: Search For Your Book" +
+                                $"\n2: Search For Your Newspaper" +
+                                $"\n3: Check for all Available Books & Newspaper" +
+                                $"\n4: Return Book" +
+                                $"\n5: Exit");
+                            
+                            int nb = Convert.ToInt32(Console.ReadLine());
+                            if (nb == 1)
+                            {
+                                Console.WriteLine("\n::::Books in Stock::::");
+                                Program.viewbook(bl);
+                                Console.WriteLine("\n::::NewsPapers in Stock::::");
+                                Program.viewnewspaper(nl);
+                                while (true) 
+                                {
+                                    Console.WriteLine("\n1. To Issue Book\n2. To Issue Newspaper \n3. To Go Back");
+                                    int a = Convert.ToInt32(Console.ReadLine());
+                                    if (a == 1)
+                                    {
+                                        Console.WriteLine("\nWhich Book You Want Borrow??\nPlease mention It's ID or Name: ");
+                                        string Bookname = Console.ReadLine();
+                                        Book findbook = bl[Bookname, Bookname];
+                                        newb.AddBorrowerBook(findbook, Bname, ID, bl);
+                                        foreach (BookBorrowed b in newb)
+                                        {
+                                            Console.WriteLine($"\n:::::Book Issued:::::\nBook Name - {b.BookName} Issued To {b.BorrowedName}");
+                                        }
+                                    }
+                                    else if (a == 2)
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                                
+                            }
+                            else if(nb == 2)
+                            {
+
+                            }
+                            else if (nb == 3)
+                            {
+                                while (true)
+                                {
+                                    Console.WriteLine(":::View:::" +
+                                        "\n1. View All Available Book" +
+                                        "\n2. View All Available Newspaper" +
+                                        "\n3. To Exit");
+                                    int ch = Convert.ToInt32(Console.ReadLine());
+                                    if (ch == 1)
+                                    {
+                                        Program.viewbook(bl);
+                                    }
+                                    else if (ch == 2)
+                                    {
+                                        Program.viewnewspaper(nl);
+                                    }
+                                    else { break; }
+                                }
+                            }
+                            else
+                            {
+                                break;
+                            }
                         }
                     }
                     else

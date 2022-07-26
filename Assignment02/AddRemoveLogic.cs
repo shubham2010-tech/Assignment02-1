@@ -17,5 +17,11 @@ namespace Assignment02
             n.AddNewspaper(new Newspaper() { NewspaperId = nid, NewspaperName = nname });
             Console.WriteLine("Newspaper Added Successfully");
         }
+        public void AddNewBorrower(Borrower b , int boid,string boname)
+        {
+            b.AddBorrower(new BorrowerList() {BorrowerId=boid,BorrowerName=boname });
+            Console.WriteLine($"Hi! {boname} Which Book You Will Prefer Today");
+        }
+        
     }
 }

@@ -61,14 +61,14 @@ namespace Assignment02
             get
             {
                 Newspaper fb = null;
-                int a = -1;
+                int a ;
                 try
                 {
                     a = Convert.ToInt32(NI);
                 }
                 catch
                 {
-                    NI = null;
+                    a = -1;
                 }
 
                 foreach (Newspaper n in _newspapers)
@@ -114,14 +114,14 @@ namespace Assignment02
             get
             {
                 Book fb = null;
-                int a = -1;
+                int a ;
                 try
                 {
                     a = Convert.ToInt32(bid);
                 }
                 catch
                 {
-                    bid = null;
+                    a = 0;
                 }
 
                 foreach (Book b in _books)

@@ -7,26 +7,25 @@ namespace Assignment02
 {
     internal class Library 
     {
-        public List<Book> _books;
-        public List<Newspaper> _newspapers;
-        private List<Borrower> borrowers;
+        protected List<Book> _books;
+        protected List<Newspaper> _newspapers;
 
     }
 
-    internal class Borrower
-    {
-    }
+    
 
-    internal class Book:Library
+    internal class Book
     {
 
         public int BookId { get; set; }
         public string BookName { get; set; }
 
+
     }
-    internal class Newspaper:Library
+    internal class Newspaper
     {
         public int NewspaperId { get; set; }
         public string NewspaperName { get; set; }
+
     }
 }

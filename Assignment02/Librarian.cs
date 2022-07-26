@@ -5,28 +5,116 @@ using System.Text;
 
 namespace Assignment02
 {
-    internal class Librarian : Library,IEnumerable
+    abstract class Librarian : Library
     {
-        //Books       
-        public void AddBook(Book NewBook)
+         public  Librarian()
         {
-            if(_books == null)
+            //Book
+            AddBook(new Book() { BookId = 1, BookName = "Avenger Secret War" });
+            AddBook(new Book() { BookId = 2, BookName = "Black Adam" });
+            AddBook(new Book() { BookId = 3, BookName = "Shazam" });
+            AddBook(new Book() { BookId = 4, BookName = "GOT" });
+            AddBook(new Book() { BookId = 5, BookName = "IronHeart" });
+            AddBook(new Book() { BookId = 6, BookName = "D." });
+            AddBook(new Book() { BookId = 7, BookName = "Death Note" });
+            AddBook(new Book() { BookId = 8, BookName = "World War" });
+            AddBook(new Book() { BookId = 9, BookName = "C#" });
+            AddBook(new Book() { BookId = 10, BookName = "New Life" });
+            //Newspaper
+            AddNewspaper(new Newspaper() { NewspaperId = 1, NewspaperName = "HindustanTimes" });
+            AddNewspaper(new Newspaper() { NewspaperId = 2, NewspaperName = "Global Times" });
+            AddNewspaper(new Newspaper() { NewspaperId = 3, NewspaperName = "Times of India" });
+            AddNewspaper(new Newspaper() { NewspaperId = 4, NewspaperName = "Dainik Jagaran" });
+            AddNewspaper(new Newspaper() { NewspaperId = 5, NewspaperName = "IndianTimes" });
+        }
+        public void AddBook(Book newbook)
+        {
+            if (_books == null)
             {
                 _books = new List<Book>();
             }
-            _books.Add(NewBook);
+            _books.Add(newbook);
         }
-        public void RemoveBook(Book AvailableBooks)
+        public void AddNewspaper(Newspaper newspaper)
         {
-            _books.Remove(AvailableBooks);
+
+            if (_newspapers == null)
+            {
+                _newspapers = new List<Newspaper>();
+            }
+            _newspapers.Add(newspaper);
+        }
+        abstract public void Remove(object obj);
+        
+    }
+    class CrudOperationOnNewspaper:Librarian,IEnumerable
+    {
+        
+        public override void Remove(object o)
+        {
+            Newspaper newspaper = (Newspaper)o;
+            _newspapers.Remove(newspaper);
+        }
+        public Newspaper this[string NN, string NI]
+        {
+
+            get
+            {
+                Newspaper fb = null;
+                int a = -1;
+                try
+                {
+                    a = Convert.ToInt32(NI);
+                }
+                catch
+                {
+                    NI = null;
+                }
+
+                foreach (Newspaper n in _newspapers)
+                {
+                    if (n.NewspaperName == NN || n.NewspaperId == a)
+                    {
+
+                        fb = n;
+                        break;
+                    }
+                }
+                return fb;
+            }
+
+        }
+        public IEnumerator GetEnumerator()
+        {
+            if (_newspapers != null)
+            {
+                foreach (Newspaper AvailableN in _newspapers)
+                {
+                    yield return AvailableN;
+                }
+            }
+
+            else
+            {
+                yield break;
+            }
+        }
+    }
+    class CrudOperationOnBook : Librarian, IEnumerable
+    {
+
+        public override void Remove(object o)
+        {
+             Book book = (Book)o;
+            _books.Remove(book);
         }
         public Book this[string fbook, string bid]
         {
-            
+
             get
             {
                 Book fb = null;
-                int a=-1;
+                int a = -1;
                 try
                 {
                     a = Convert.ToInt32(bid);
@@ -35,10 +123,10 @@ namespace Assignment02
                 {
                     bid = null;
                 }
-                
+
                 foreach (Book b in _books)
                 {
-                    if (b.BookName == fbook || b.BookId==a)
+                    if (b.BookName == fbook || b.BookId == a)
                     {
 
                         fb = b;
@@ -46,43 +134,6 @@ namespace Assignment02
                     }
                 }
                 return fb;
-            }
-            
-        }
-        
-
-
-        //Newspaper
-        public void AddNewsPaper(Newspaper Newnewspaper)
-        {
-            if (_newspapers == null)
-            {
-                _newspapers = new List<Newspaper>();
-            }
-            _newspapers.Add(Newnewspaper);
-        }
-        public void RemoveNewspaper(Newspaper newspaper)
-        {
-            _newspapers.Remove(newspaper);
-        }
-        public Newspaper this[string nName]
-        {
-
-            get
-            {
-                Newspaper fn = null;
-                
-
-                foreach (Newspaper n in _newspapers)
-                {
-                    if (n.NewspaperName == nName )
-                    {
-
-                        fn = n;
-                        break;
-                    }
-                }
-                return fn;
             }
 
         }
@@ -95,19 +146,11 @@ namespace Assignment02
                     yield return AvailableBook;
                 }
             }
-            else if (_newspapers != null)
-            {
-                foreach (Newspaper AvailableNP in _newspapers)
-                {
-                    yield return AvailableNP;
-                }
-            }
+
             else
             {
                 yield break;
             }
         }
     }
-
-    
 }

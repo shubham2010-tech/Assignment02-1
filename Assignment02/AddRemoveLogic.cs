@@ -6,14 +6,15 @@ namespace Assignment02
 {
     internal class AddRemoveLogic
     {
-        public void AddB(Librarian l,int bid,String bname)
+        public void AddB(CrudOperationOnBook b,int bid,String bname)
         {
-            l.AddBook(new Book() { BookId = bid, BookName = bname });
+            
+            b.AddBook(new Book() { BookId = bid, BookName = bname });
             Console.WriteLine("Book Added Successfully");
         }
-        public void AddN(Librarian l, int nid, String nname)
+        public void AddN(CrudOperationOnNewspaper n, int nid, String nname)
         {
-            l.AddNewsPaper(new Newspaper() { NewspaperId = nid, NewspaperName = nname });
+            n.AddNewspaper(new Newspaper() { NewspaperId = nid, NewspaperName = nname });
             Console.WriteLine("Newspaper Added Successfully");
         }
     }
